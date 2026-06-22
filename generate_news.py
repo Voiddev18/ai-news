@@ -16,7 +16,7 @@ if os.path.exists(".env"):
                     os.environ[parts[0].strip()] = parts[1].strip()
 
 # Configuration
-RSS_URL = "https://news.google.com/rss/search?q=Artificial+Intelligence&hl=en-US&gl=US&ceid=US:en"
+RSS_URL = "https://news.google.com/rss/search?q=AI+coding+OR+coding+model+OR+code+generation+OR+AI+programmer&hl=en-US&gl=US&ceid=US:en"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
@@ -325,8 +325,7 @@ def generate_news_content(articles):
     }
     
     system_prompt = (
-        "You are an expert AI news curator. Your task is to select and summarize the most important artificial intelligence news "
-        "from the provided list of recent articles.\n\n"
+        "You are an expert AI news curator specializing in AI coding models, code generation assistants, and AI software engineering (e.g. GitHub Copilot, Claude Sonnet, Gemini Code Assist, specialized coding LLMs, AI agents, and code reasoning systems). Your task is to select and summarize the most important news related specifically to coding models and AI programming from the provided list of recent articles.\n\n"
         "Constraints:\n"
         "1. Choose 3 to 5 'headline_stories'. For each, write a 2-3 sentence summary. You MUST use the exact URL from the input list.\n"
         "2. Choose 3 to 5 other interesting but minor news points for 'quick_hits'. For each, write a short, one-sentence description and use its exact URL.\n"
