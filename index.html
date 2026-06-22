@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Digest - Monday, June 22, 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #161b26;
+            --border-color: #242b3d;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --btn-gradient: linear-gradient(135deg, #6366f1, #4f46e5);
+            --btn-hover: linear-gradient(135deg, #4f46e5, #4338ca);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            padding: 1.5rem 1rem;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .digest-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+        
+        .date {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        .headline-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .headline-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+        
+        .headline-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.4;
+            color: #ffffff;
+        }
+        
+        .headline-card p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+        }
+        
+        .source-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 0 1.25rem;
+            background: var(--btn-gradient);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            align-self: flex-start;
+            margin-top: 0.5rem;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        
+        .source-btn:hover {
+            background: var(--btn-hover);
+        }
+        
+        .source-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .quick-hits-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .quick-hit-item {
+            background-color: var(--card-bg);
+            border-left: 3px solid var(--accent-cyan);
+            border-radius: 0 8px 8px 0;
+            padding: 1rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .quick-hit-link {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            line-height: 1.4;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .quick-hit-link:hover {
+            color: var(--accent-cyan);
+            text-decoration: underline;
+        }
+        
+        .takeaway-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(168, 85, 247, 0.08));
+            border-left: 4px solid var(--accent-purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.1);
+            border-right: 1px solid rgba(139, 92, 246, 0.1);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+        
+        .takeaway-box h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--accent-purple);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .takeaway-box p {
+            font-size: 1.05rem;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+        
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="digest-title">AI News Digest</div>
+            <div class="date">Monday, June 22, 2026</div>
+        </header>
+        
+        <section>
+            <h2 class="section-title">🔥 Headline Stories</h2>
+            
+        <div class="headline-card">
+            <h3>Americans Have Turned Against AI in Incredible Numbers</h3>
+            <p>A recent survey has shown that Americans have turned against AI in large numbers, with many expressing concerns about the impact of AI on their lives. This shift in public opinion could have significant implications for the development and implementation of AI technologies. As AI becomes increasingly integrated into various aspects of society, it is essential to address the concerns and misconceptions that are driving this trend.</p>
+            <a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQd19UVlBCbWZLRlduNWVRQmQzR0JicUU5SS1jTE1tSWtWTDRDZVNSRkNBTVJGNW1VRk40anRYQm1PSEpvMXRFam5oakVyMHIxUG9oUGNnd3lJVEFMc2xtRWR2NHQxTGdZNHEzWEliY3psczRYdHQ0MFZYQzZlZEZQeQ?oc=5" target="_blank" rel="noopener noreferrer" class="source-btn">Read Source</a>
+        </div>
+        <div class="headline-card">
+            <h3>Stack battles: the US-China artificial-intelligence rivalry is moving beyond chips alone</h3>
+            <p>The US-China artificial-intelligence rivalry is expanding beyond the chip industry, with both countries investing heavily in AI research and development. This rivalry is expected to have significant implications for the global AI landscape, with potential applications in various fields such as healthcare, finance, and education. As the competition between the US and China intensifies, it is likely to drive innovation and advancements in AI technologies.</p>
+            <a href="https://news.google.com/rss/articles/CBMiswFBVV95cUxNV0hFZTFNOFJ5R0lQbk1iLS02VGl5REZ2MWJUMmw0bFU4NmRETlF6X3VpTGdQR0QzV0xRNlZ2R2FsSlktT2xrMjNHRHYxZDR2NlV3V25OLWl1VFJIcWdNS281Tml6c3JMTzJuYTBkb255U1J6ek92TVdPb2FiQWlTdmlQRDVlVExXbnVUbjJiZjFfZmp0RWpEa3dwMi1ROGFzT1ZNUXYxZmJyX1ZDb0NYaTNpTQ?oc=5" target="_blank" rel="noopener noreferrer" class="source-btn">Read Source</a>
+        </div>
+        <div class="headline-card">
+            <h3>Chinese AI Stocks Rally on Demand Optimism and Policy Support</h3>
+            <p>Chinese AI stocks have seen a significant rally in recent times, driven by increasing demand and policy support from the government. This trend is expected to continue, with many investors betting on the growth potential of China's AI industry. As the Chinese government continues to invest in AI research and development, it is likely to create new opportunities for companies operating in the sector.</p>
+            <a href="https://news.google.com/rss/articles/CBMisgFBVV95cUxPaVpGWGVJdndrQ21CZklZbThXbFJwZXZYM3RJSV9QYVhEYzF3Si1OUWJVNXlLNVNZbGRmNVBsWGlCbnkzOVVwWFRXSVpPbGtianp0cEpXN3hHdDJrLXlwUkNGb2k3Mkl0NWhybnNYTTNxeWhPb3NlUHduMG10dHhjclMxdDk0dlhNRjZTejJ4V19yb2R1dGZCR0Y3UUhjSTN5Z2dtNzJ5eXZVV0V6Qmd1cnRB?oc=5" target="_blank" rel="noopener noreferrer" class="source-btn">Read Source</a>
+        </div>
+        </section>
+        
+        <section>
+            <h2 class="section-title">⚡ Quick Hits</h2>
+            <ul class="quick-hits-list">
+                
+        <li class="quick-hit-item">
+            <a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE10dl9ackpxU0RaM1l1NkQtRFZPOVZuaE5GMVRPOWVvN1lTekU4SGM0RTNNYTB6RVJyLXl1V0lST2d4djVrUGlaVVliXzA2blhYVTZvNlNtbXI2eVJLZGF5MlRweVpqMUFkT20tXzFrWjJOdnRm0gF0QVVfeXFMT2l0SnVwNjA0eGpCWVZKOGU5MXlVeHNSdGtTV2poeEdxU3hoNmM5MFNRSkZFQ3NQOVJyWUJkeWc1SVN5RW41MWl6V3RlRkdaLVlIOWIwMmhNV0FJWXUzc3ROZHpIT1lpcnQzVUZ3cHFMcXk3X0I?oc=5" target="_blank" rel="noopener noreferrer" class="quick-hit-link">
+                AI scandal rocks the German media
+            </a>
+        </li>
+        <li class="quick-hit-item">
+            <a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxOSVlvNFp0TzM4TjNDd1dHYTdRc2ZKeDdJcDIwOHAtaGpvTk9YRzdhQVRETnhSb1M1YkV5YUVjSlpMZl9oZkhGdnRZTF9EWU1IYUpHRV9oeW40YWtCSUpKb3dGVlNWaUJsX2I5Vy0wdDM5QThGRGx2b3JxN0NBUF9rQnJQWTBJMFZpMzA2am9pLWJBQTNLaVR4Zg?oc=5" target="_blank" rel="noopener noreferrer" class="quick-hit-link">
+                Could Broadcom Be the Best Way to Invest in Artificial Intelligence Right Now?
+            </a>
+        </li>
+        <li class="quick-hit-item">
+            <a href="https://news.google.com/rss/articles/CBMirwFBVV95cUxPR2VoSHF4djd5YnE5VUZxRFVCUnp5Vm9Xc3BuNllmUFl4cmpsNlp3Z04xSVJkby1wUWRNaWh2OHJaTV9TTkRzWWV2aVEzVEt5blo4eHJ6cE56RUowelRDNUlzRkllVHpiWHZjOU5SWXJPNlNBX1Z3ZHJYT2gtSEdYM3JkeG9uS2F1eGV1SjBnZUZmYWdYWmxxeFJUWFRUdTAzQ2dMZXNUdmFDYkt3eUJR?oc=5" target="_blank" rel="noopener noreferrer" class="quick-hit-link">
+                Insilico lands heavily backloaded $2.5B AI drug discovery deal with SK Biopharm
+            </a>
+        </li>
+            </ul>
+        </section>
+        
+        <section>
+            <div class="takeaway-box">
+                <h3>💡 Why It Matters</h3>
+                <p>The recent developments in the AI landscape, including the growing US-China rivalry, increasing investment in AI research and development, and the expanding applications of AI in various fields, are expected to have significant implications for the global economy and society. As AI continues to advance and become more integrated into our lives, it is essential to address the concerns and challenges associated with its development and implementation, including issues related to job displacement, bias, and ethics. The future of AI will depend on the ability of governments, industries, and individuals to work together to harness its potential while mitigating its risks.</p>
+            </div>
+        </section>
+        
+        <footer>
+            Generated automatically via Groq &amp; GitHub Actions.<br>
+            Stable bookmark link. Updated daily at 10:00 AM PDT.
+        </footer>
+    </div>
+</body>
+</html>
