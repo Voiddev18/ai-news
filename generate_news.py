@@ -77,14 +77,59 @@ TEMPLATE = """<!DOCTYPE html>
             border-bottom: 1px solid var(--border-color);
         }}
         
+        .header-top {{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }}
+        
         .digest-title {{
             font-size: 2rem;
             font-weight: 700;
             background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
             letter-spacing: -0.025em;
+        }}
+        
+        .refresh-action-btn {{
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }}
+        
+        .refresh-action-btn:hover {{
+            background: var(--card-bg);
+            color: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }}
+        
+        .refresh-action-btn:active {{
+            transform: scale(0.95);
+        }}
+        
+        .refresh-icon {{
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }}
+        
+        .spinning {{
+            animation: spin 1s linear infinite;
+        }}
+        
+        @keyframes spin {{
+            0% {{ transform: rotate(0deg); }}
+            100% {{ transform: rotate(360deg); }}
         }}
         
         .date {{
@@ -93,6 +138,39 @@ TEMPLATE = """<!DOCTYPE html>
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            text-align: left;
+        }}
+        
+        .status-msg-box {{
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            text-align: left;
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }}
+        
+        .status-msg-box.hidden {{
+            display: none !important;
+        }}
+        
+        .progress-bar-container {{
+            background: var(--border-color);
+            border-radius: 9999px;
+            height: 6px;
+            width: 100%;
+            overflow: hidden;
+        }}
+        
+        .progress-bar {{
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s linear;
         }}
         
         section {{
@@ -247,8 +325,17 @@ TEMPLATE = """<!DOCTYPE html>
 <body>
     <div class="container">
         <header>
-            <div class="digest-title">AI News Digest</div>
+            <div class="header-top">
+                <div class="digest-title">AI News Digest</div>
+                <button id="refresh-btn" class="refresh-action-btn" title="Trigger Refresh" aria-label="Trigger News Refresh">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="refresh-icon"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                </button>
+            </div>
             <div class="date">{date}</div>
+            <div id="status-container" class="status-msg-box hidden">
+                <span id="status-text"></span>
+                <div class="progress-bar-container"><div id="progress-bar" class="progress-bar"></div></div>
+            </div>
         </header>
         
         <section>
@@ -275,6 +362,74 @@ TEMPLATE = """<!DOCTYPE html>
             Stable bookmark link. Updated daily at 10:00 AM PDT.
         </footer>
     </div>
+    <script>
+        document.getElementById('refresh-btn').addEventListener('click', async function() {{
+            const btn = this;
+            const icon = btn.querySelector('.refresh-icon');
+            const statusBox = document.getElementById('status-container');
+            const statusText = document.getElementById('status-text');
+            const progressBar = document.getElementById('progress-bar');
+            
+            let pat = localStorage.getItem('gh_pat');
+            if (!pat) {{
+                pat = prompt("To trigger an on-demand news refresh, please enter a GitHub Personal Access Token (PAT) with 'workflow' permissions. It will be saved only in your device's local storage:");
+                if (!pat) return;
+                localStorage.setItem('gh_pat', pat.trim());
+            }}
+            
+            btn.disabled = true;
+            icon.classList.add('spinning');
+            statusBox.classList.remove('hidden');
+            statusText.innerText = "Triggering refresh on GitHub Actions...";
+            progressBar.style.width = "0%";
+            
+            try {{
+                const owner = "Voiddev18";
+                const repo = "ai-news";
+                const response = await fetch(`https://api.github.com/repos/${{owner}}/${{repo}}/actions/workflows/daily-news.yml/dispatches`, {{
+                    method: 'POST',
+                    headers: {{
+                        'Authorization': `Bearer ${{pat}}`,
+                        'Accept': 'application/vnd.github+json',
+                        'X-GitHub-Api-Version': '2022-11-28'
+                    }},
+                    body: JSON.stringify({{ ref: 'main' }})
+                }});
+                
+                if (response.ok || response.status === 204) {{
+                    statusText.innerHTML = "🔄 <strong>Refresh triggered!</strong> Scraper is running in the cloud. Updating page in 40 seconds...";
+                    
+                    let duration = 40;
+                    let current = 0;
+                    const interval = setInterval(() => {{
+                        current += 0.2;
+                        const pct = (current / duration) * 100;
+                        progressBar.style.width = `${{pct}}%`;
+                        
+                        if (current >= duration) {{
+                            clearInterval(interval);
+                            statusText.innerText = "Reloading page...";
+                            location.reload();
+                        }}
+                    }}, 200);
+                }} else {{
+                    const errText = await response.text();
+                    console.error("Github API Error:", errText);
+                    if (response.status === 401 || response.status === 403) {{
+                        localStorage.removeItem('gh_pat');
+                        throw new Error("Invalid GitHub token. It has been cleared. Please click refresh and try again with a valid token.");
+                    }} else {{
+                        throw new Error(`Failed to trigger workflow: ${{response.status}} ${{response.statusText}}`);
+                    }}
+                }}
+            }} catch (error) {{
+                btn.disabled = false;
+                icon.classList.remove('spinning');
+                statusText.innerHTML = `❌ <strong style="color: #f87171;">Error:</strong> ${{error.message}}`;
+                progressBar.style.width = "0%";
+            }}
+        }});
+    </script>
 </body>
 </html>
 """
