@@ -16,7 +16,7 @@ if os.path.exists(".env"):
                     os.environ[parts[0].strip()] = parts[1].strip()
 
 # Configuration
-RSS_URL = "https://news.google.com/rss/search?q=AI+coding+OR+coding+model+OR+code+generation+OR+AI+programmer&hl=en-US&gl=US&ceid=US:en"
+RSS_URL = "https://news.google.com/rss/search?q=(\"Abacus.AI\"+OR+\"Abacus+AI\"+OR+ChatLLM+OR+\"image+model\"+OR+\"text-to-image\"+OR+\"LLM+advancement\"+OR+GPT+OR+Claude+OR+Llama+OR+Mistral+OR+Midjourney)&hl=en-US&gl=US&ceid=US:en"
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
@@ -325,7 +325,13 @@ def generate_news_content(articles):
     }
     
     system_prompt = (
-        "You are an expert AI news curator specializing in AI coding models, code generation assistants, and AI software engineering (e.g. GitHub Copilot, Claude Sonnet, Gemini Code Assist, specialized coding LLMs, AI agents, and code reasoning systems). Your task is to select and summarize the most important news related specifically to coding models and AI programming from the provided list of recent articles.\n\n"
+        "You are an expert AI news curator specializing in new image generation models (like Midjourney, Stable Diffusion, FLUX, etc.), LLM advancements (like GPT, Claude, Gemini, Llama, Mistral, etc.), and news about Abacus.AI, ChatLLM, or their competitors (such as Scale AI, Databricks, OpenAI, Anthropic, Cohere, Together AI, etc.).\n\n"
+        "CRITICAL FILTERING RULE: You must ONLY select news stories that fall into one of these categories:\n"
+        "1. New image models and advancements in text-to-image/video generation.\n"
+        "2. New large language model (LLM) advancements and model releases.\n"
+        "3. News or developments regarding Abacus.AI or ChatLLM.\n"
+        "4. News or developments regarding direct competitors of Abacus.AI/ChatLLM (e.g. Scale AI, Databricks, Together AI, OpenAI Enterprise, Anthropic, etc.).\n"
+        "Do NOT select or include general AI news, policy, ethics, or unrelated corporate news unless it fits the above categories.\n\n"
         "Constraints:\n"
         "1. Choose 3 to 5 'headline_stories'. For each, write a 2-3 sentence summary. You MUST use the exact URL from the input list.\n"
         "2. Choose 3 to 5 other interesting but minor news points for 'quick_hits'. For each, write a short, one-sentence description and use its exact URL.\n"
